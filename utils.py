@@ -88,6 +88,24 @@ class Line:
         glBindVertexArray(self.vao)
         glDrawArrays(GL_LINES, 0, 2)
         glBindVertexArray(0)
+    
+    # if this line is insides of a box defined by vertices, return True
+    def collides(self, vertices):
+        x_min = min([vertex[0] for vertex in vertices])
+        x_max = max([vertex[0] for vertex in vertices])
+        y_min = min([vertex[1] for vertex in vertices])
+        y_max = max([vertex[1] for vertex in vertices])
+        z_min = min([vertex[2] for vertex in vertices])
+        z_max = max([vertex[2] for vertex in vertices])
+        print(x_min, "x", x_max, "\t", y_min, "y", y_max, "\t", z_min, "z", z_max, "\t\t(", self.start, ",", self.end, ")")
+        # print(x_min, "x", x_max, "\t", y_min, "y", y_max, "\t", z_min, "z", z_max)
+        # print(round(x_min, 4), "x", round(x_max, 4), "\t", round(y_min, 4), "y", round(y_max, 4), "\t", round(z_min, 4), "z", round(z_max, 4))
+
+        if (x_min <= self.start[0] <= x_max) and (y_min <= self.start[1] <= y_max) and (z_min <= self.start[2] <= z_max):
+            return True
+        if (x_min <= self.end[0] <= x_max) and (y_min <= self.end[1] <= y_max) and (z_min <= self.end[2] <= z_max):
+            return True
+        return False       
 
 
     def __del__(self):

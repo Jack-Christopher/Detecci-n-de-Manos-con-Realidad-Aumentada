@@ -1,3 +1,4 @@
+import glm
 import numpy as np
 from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
@@ -8,6 +9,8 @@ class Hand:
     def __init__(self, landmarks):
         self.color = hand_color
         self.lines = []
+        self.movement = 0
+        self.landmarks = landmarks
         self.shader_program = compileProgram(
             compileShader(vertex_shader_source, GL_VERTEX_SHADER),
             compileShader(fragment_shader_source, GL_FRAGMENT_SHADER)
@@ -27,15 +30,19 @@ class Hand:
         self.update()
 
     def set_landmarks(self, landmarks):
-        self.landmarks = np.array(landmarks)
-        self.landmarks[:, 1] *= -1
+        landmarks = np.array(landmarks)
+        landmarks[:, 1] *= -1
         # convert to OpenGL coordinates
-        self.landmarks[:, 0] = (self.landmarks[:, 0] * 2) - 1
-        self.landmarks[:, 1] = (self.landmarks[:, 1] * 2) + 1
-        self.landmarks[:, 2] = (self.landmarks[:, 2] * 2) - 1
+        landmarks[:, 0] = (landmarks[:, 0] * 2) - 1
+        landmarks[:, 1] = (landmarks[:, 1] * 2) + 1
+        landmarks[:, 2] = (landmarks[:, 2] * 20000) -0.5
+        landmarks[:, 2] = (landmarks[:, 2] * 2) - 1
+        
+        self.movement = landmarks[0] - self.landmarks[0]
+        self.landmarks = landmarks
         self.update()
 
-        print(self.landmarks)
+        # print(self.landmarks)
 
     def update(self):
         self.clean()
@@ -55,3 +62,14 @@ class Hand:
         for line in self.lines:
             del line
         self.lines = []
+
+
+    def collides(self, vertices):
+        # print("Checking collision in hand")
+        # print(vertices)
+
+        for idx, line in enumerate(self.lines):
+            # print(idx, end=" ")
+            if line.collides(vertices):
+                return True
+        return False

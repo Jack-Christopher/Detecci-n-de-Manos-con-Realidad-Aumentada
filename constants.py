@@ -2,6 +2,7 @@ window_height = 600
 window_width = 600
 window_title = "OpenGL Window"
 hand_color = (0.6, 0.6, 0.6)
+cube_color = (0.3, 0.3, 0.3)
 
 # Define the vertex shader source
 vertex_shader_source = """

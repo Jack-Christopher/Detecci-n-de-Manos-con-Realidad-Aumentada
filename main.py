@@ -2,9 +2,11 @@ import utils as ut
 import numpy as np
 
 # OpenGL and GLFW libraries
+import glm
 import glfw
 from hand import Hand
 from OpenGL.GL import *
+from cube import Cube
 
 # OpenCV and mediapipe libraries
 import mediapipe as mp
@@ -27,6 +29,7 @@ mp_hands = mp.solutions.hands
 cap = cv2.VideoCapture(0)
 
 HANDS = []
+cube = Cube(glm.vec3(0, 0, 0), 0.4)
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands:
     while cap.isOpened() and not glfw.window_should_close(window):
@@ -48,11 +51,21 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
         cv2.imshow('Hand Tracking', image)
 
         # Clear the color buffer
-        glClear(GL_COLOR_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+        # detect collisions
+        for hand in HANDS:
+            # reshape the vertices to be a list of points in 3d
+            if hand.collides((cube.vertices).reshape(-1, 3)):
+                # print("collision")
+                cube.move(hand.movement)
+                # print("("+str(hand.movement[0])+", "+str(hand.movement[1])+", "+str(hand.movement[2])+")")
 
         # Draw the hands
         for hand in HANDS:
+            # print("("+str(hand.landmarks[0][0])+", "+str(hand.landmarks[0][1])+", "+str(hand.landmarks[0][2])+")")
             hand.draw()
+        cube.draw()
 
         # Swap buffers
         glfw.swap_buffers(window)
