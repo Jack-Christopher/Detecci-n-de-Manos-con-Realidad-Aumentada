@@ -50,6 +50,19 @@ def init_glfw():
 
     return window
 
+def get_z_coordinate(landmarks):
+    # Get the z coordinate of the hand
+    max_diff = max([np.linalg.norm(landmarks[i] - landmarks[j]) for i, j in [(0, 5), (0, 17), (5, 17)]])
+    # z must be a value between -1 and 1
+    z = (((1-max_diff)**2) / 2 )
+
+    # print("max_diff:", max_diff, "z:",z)
+
+    # change the z-coord of the landmarks
+    landmarks[:, 2] = z
+    return landmarks
+    
+
 
 class Line:
     def __init__(self, start, end, shader_program, color):
@@ -97,7 +110,7 @@ class Line:
         y_max = max([vertex[1] for vertex in vertices])
         z_min = min([vertex[2] for vertex in vertices])
         z_max = max([vertex[2] for vertex in vertices])
-        print(x_min, "x", x_max, "\t", y_min, "y", y_max, "\t", z_min, "z", z_max, "\t\t(", self.start, ",", self.end, ")")
+        # print(x_min, "x", x_max, "  ", y_min, "y", y_max, "  ", z_min, "z", z_max, "\t(", self.start, ",", self.end, ")")
         # print(x_min, "x", x_max, "\t", y_min, "y", y_max, "\t", z_min, "z", z_max)
         # print(round(x_min, 4), "x", round(x_max, 4), "\t", round(y_min, 4), "y", round(y_max, 4), "\t", round(z_min, 4), "z", round(z_max, 4))
 

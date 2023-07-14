@@ -35,8 +35,10 @@ class Hand:
         # convert to OpenGL coordinates
         landmarks[:, 0] = (landmarks[:, 0] * 2) - 1
         landmarks[:, 1] = (landmarks[:, 1] * 2) + 1
-        landmarks[:, 2] = (landmarks[:, 2] * 20000) -0.5
-        landmarks[:, 2] = (landmarks[:, 2] * 2) - 1
+        # landmarks[:, 2] = (landmarks[:, 2] * 2) - 1
+        # landmarks[:, 2] = ut.get_z_coordinate(landmarks[:, 2])
+        landmarks = ut.get_z_coordinate(landmarks)
+
         
         self.movement = landmarks[0] - self.landmarks[0]
         self.landmarks = landmarks
@@ -51,7 +53,6 @@ class Hand:
             vertices = self.landmarks[indices]
             for i in range(len(vertices) - 1):
                 self.lines.append(ut.Line(vertices[i], vertices[i + 1], self.shader_program, self.color))
-
 
     def draw(self):
         for line in self.lines:
