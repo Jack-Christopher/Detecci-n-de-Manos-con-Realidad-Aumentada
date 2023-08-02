@@ -7,6 +7,7 @@ import glfw
 from hand import Hand
 from OpenGL.GL import *
 from cube import Cube
+from background import Background
 
 # OpenCV and mediapipe libraries
 import mediapipe as mp
@@ -30,10 +31,17 @@ cap = cv2.VideoCapture(0)
 
 HANDS = []
 cube = Cube(glm.vec3(0, 0, 0), 0.4)
+background = Background("texture.jpg")
+
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands:
     while cap.isOpened() and not glfw.window_should_close(window):
+
+        #OPEN CV
+
         image, results = ut.get_image(cap, hands)
+        image2 = cv2.flip(image, 0)
+        cv2. imwrite('frame.jpg', image2)
 
         if results.multi_hand_landmarks:
             for idx, hand in enumerate(results.multi_hand_landmarks):
@@ -50,8 +58,16 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
 
         cv2.imshow('Hand Tracking', image)
 
+        #OPEN GL
+
         # Clear the color buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        # Draw the background
+        background = Background("frame.jpg")
+
+        background.draw()
+
+
 
         # detect collisions
         for hand in HANDS:
