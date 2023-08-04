@@ -20,9 +20,6 @@ import numpy as np
 
 # OpenGL initialization
 window = ut.init_glfw()
-# Enable blending for transparency
-# glEnable(GL_BLEND)
-# glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
 # OpenCV initialization
 mp_drawing = mp.solutions.drawing_utils
@@ -31,8 +28,6 @@ cap = cv2.VideoCapture(0)
 
 HANDS = []
 cube = Cube(glm.vec3(0, 0, 0), 0.4)
-background = Background("texture.jpg")
-
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands:
     while cap.isOpened() and not glfw.window_should_close(window):
@@ -75,6 +70,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
             if hand.collides((cube.vertices).reshape(-1, 3)):
                 # print("collision")
                 cube.move(hand.movement)
+                cube.zoom()
                 # print("("+str(hand.movement[0])+", "+str(hand.movement[1])+", "+str(hand.movement[2])+")")
 
         # Draw the hands
@@ -96,3 +92,5 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
 cap.release()
 cv2.destroyAllWindows()
 glfw.terminate()
+
+os.remove("frame.jpg")

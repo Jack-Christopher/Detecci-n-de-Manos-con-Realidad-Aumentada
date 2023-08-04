@@ -49,7 +49,15 @@ class Cube:
         self.coordinates = coordinates
         self.update()
         
+    # def zoom(z):
+    # """Zooms the 3D object by the given amount."""
+    # cube.scale(1 / (z + 1))
     
+    def zoom(self):
+        z = self.coordinates[2]
+        self.side = self.side * (1 / (z + 1))
+        self.update()
+
     def draw(self):
         glUseProgram(self.shader_program)
 
