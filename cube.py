@@ -56,7 +56,7 @@ class Cube:
         ]
         self.vertices = np.array(self.vertices, dtype=np.float32)
 
-        self.rotation_angle += 0.1
+        self.rotation_angle += 0.01
         # rotate all vertices around the z axis
         z_rotation_matrix = np.array([
             [np.cos(self.rotation_angle), -np.sin(self.rotation_angle), 0],
@@ -73,8 +73,6 @@ class Cube:
         ])
         for i in range(len(self.vertices)//3):
             self.vertices[i*3:i*3+3] = y_rotation_matrix @ self.vertices[i*3:i*3+3]
-      
-
 
         self.vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, self.vbo)

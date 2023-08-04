@@ -27,8 +27,9 @@ mp_hands = mp.solutions.hands
 cap = cv2.VideoCapture(0)
 
 HANDS = []
-cube = Cube(glm.vec3(0, 0, 0), 0.4, cube_color=(0, 0, 1))
-cube2 = Cube(glm.vec3(0.5, 0.5, 0.5), 0.2, cube_color=(0, 1, 0))
+must_rotate = False
+cube = Cube(glm.vec3(-0.4, -0.4, 0), 0.3, cube_color=(0, 0, 1))
+cube2 = Cube(glm.vec3(0.4, 0.4, 0), 0.3, cube_color=(0, 1, 0))
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands:
     while cap.isOpened() and not glfw.window_should_close(window):
@@ -52,7 +53,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
         else:
             HANDS = []
 
-        cv2.imshow('Hand Tracking', image)
+        # cv2.imshow('Hand Tracking', image)
 
         #OPEN GL
 
@@ -72,6 +73,11 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                 # print("collision")
                 cube.move(hand.movement)
                 cube.zoom()
+                # print("("+str(hand.movement[0])+", "+str(hand.movement[1])+", "+str(hand.movement[2])+")")
+            if hand.collides((cube2.vertices).reshape(-1, 3)):
+                # print("collision")
+                cube2.move(hand.movement)
+                cube2.zoom()
                 # print("("+str(hand.movement[0])+", "+str(hand.movement[1])+", "+str(hand.movement[2])+")")
 
         # Draw the hands
