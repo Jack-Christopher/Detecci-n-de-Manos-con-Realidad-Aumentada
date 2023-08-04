@@ -5,7 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 
 class Cube:
-    def __init__(self, coordinates, side):
+    def __init__(self, coordinates, side, cube_color=(1, 1, 1)):
         self.side = side
         self.color = cube_color
         self.vertices = []

@@ -27,7 +27,8 @@ mp_hands = mp.solutions.hands
 cap = cv2.VideoCapture(0)
 
 HANDS = []
-cube = Cube(glm.vec3(0, 0, 0), 0.4)
+cube = Cube(glm.vec3(0, 0, 0), 0.4, cube_color=(0, 0, 1))
+cube2 = Cube(glm.vec3(0.5, 0.5, 0.5), 0.2, cube_color=(0, 1, 0))
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands:
     while cap.isOpened() and not glfw.window_should_close(window):
@@ -78,6 +79,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
             # print("("+str(hand.landmarks[0][0])+", "+str(hand.landmarks[0][1])+", "+str(hand.landmarks[0][2])+")")
             hand.draw()
         cube.draw()
+        cube2.draw()
 
         # Swap buffers
         glfw.swap_buffers(window)
