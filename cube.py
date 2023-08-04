@@ -14,6 +14,7 @@ class Cube:
             compileShader(vertex_shader_source, GL_VERTEX_SHADER),
             compileShader(fragment_shader_source, GL_FRAGMENT_SHADER)
         )
+        self.rotation_angle = 0
         self.set_coordinates(coordinates)
         self.update()
 
@@ -34,6 +35,26 @@ class Cube:
             self.coordinates[0] - self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] - self.side/2,
         ]
         self.vertices = np.array(self.vertices, dtype=np.float32)
+
+        self.rotation_angle += 0.1
+        # rotate all vertices around the z axis
+        z_rotation_matrix = np.array([
+            [np.cos(self.rotation_angle), -np.sin(self.rotation_angle), 0],
+            [np.sin(self.rotation_angle), np.cos(self.rotation_angle), 0],
+            [0, 0, 1]
+        ])
+        for i in range(8):
+            self.vertices[i*3:i*3+3] = z_rotation_matrix @ self.vertices[i*3:i*3+3]
+        # rotate all vertices around the y axis
+        y_rotation_matrix = np.array([
+            [np.cos(self.rotation_angle), 0, np.sin(self.rotation_angle)],
+            [0, 1, 0],
+            [-np.sin(self.rotation_angle), 0, np.cos(self.rotation_angle)]
+        ])
+        for i in range(8):
+            self.vertices[i*3:i*3+3] = y_rotation_matrix @ self.vertices[i*3:i*3+3]
+      
+
 
         self.vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, self.vbo)

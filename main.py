@@ -78,7 +78,10 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
         for hand in HANDS:
             # print("("+str(hand.landmarks[0][0])+", "+str(hand.landmarks[0][1])+", "+str(hand.landmarks[0][2])+")")
             hand.draw()
+
+        cube.update()
         cube.draw()
+        cube2.update()
         cube2.draw()
 
         # Swap buffers
