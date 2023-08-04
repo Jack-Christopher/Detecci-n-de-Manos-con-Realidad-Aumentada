@@ -33,6 +33,26 @@ class Cube:
             self.coordinates[0] + self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] - self.side/2,
             self.coordinates[0] - self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] - self.side/2,
             self.coordinates[0] - self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] - self.side/2,
+            # right
+            self.coordinates[0] + self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] + self.side/2,
+            self.coordinates[0] + self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] + self.side/2,
+            self.coordinates[0] + self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] - self.side/2,
+            self.coordinates[0] + self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] - self.side/2,
+            # left
+            self.coordinates[0] - self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] + self.side/2,
+            self.coordinates[0] - self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] + self.side/2,
+            self.coordinates[0] - self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] - self.side/2,
+            self.coordinates[0] - self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] - self.side/2,
+            # top
+            self.coordinates[0] + self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] + self.side/2,
+            self.coordinates[0] + self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] - self.side/2,
+            self.coordinates[0] - self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] - self.side/2,
+            self.coordinates[0] - self.side/2, self.coordinates[1] + self.side/2, self.coordinates[2] + self.side/2,
+            # bottom
+            self.coordinates[0] + self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] + self.side/2,
+            self.coordinates[0] + self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] - self.side/2,
+            self.coordinates[0] - self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] - self.side/2,
+            self.coordinates[0] - self.side/2, self.coordinates[1] - self.side/2, self.coordinates[2] + self.side/2,
         ]
         self.vertices = np.array(self.vertices, dtype=np.float32)
 
@@ -43,7 +63,7 @@ class Cube:
             [np.sin(self.rotation_angle), np.cos(self.rotation_angle), 0],
             [0, 0, 1]
         ])
-        for i in range(8):
+        for i in range(len(self.vertices)//3):
             self.vertices[i*3:i*3+3] = z_rotation_matrix @ self.vertices[i*3:i*3+3]
         # rotate all vertices around the y axis
         y_rotation_matrix = np.array([
@@ -51,7 +71,7 @@ class Cube:
             [0, 1, 0],
             [-np.sin(self.rotation_angle), 0, np.cos(self.rotation_angle)]
         ])
-        for i in range(8):
+        for i in range(len(self.vertices)//3):
             self.vertices[i*3:i*3+3] = y_rotation_matrix @ self.vertices[i*3:i*3+3]
       
 
